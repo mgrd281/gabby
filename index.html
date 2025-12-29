@@ -5,17 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GABBY | Smart Stabilizer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Cairo:wght@400;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Cairo:wght@400;700&display=swap"
         rel="stylesheet">
     <style>
         :root {
             --bg: #0f1115;
-            --card-bg: #1c1e26;
+            --card-surface: #181a20;
             --accent: #3b82f6;
-            /* Modern Blue */
-            --accent-glow: rgba(59, 130, 246, 0.3);
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
@@ -24,7 +23,7 @@
         body {
             font-family: 'Inter', 'Cairo', sans-serif;
             background: var(--bg);
-            color: var(--text-primary);
+            color: var(--text-main);
             text-align: center;
             padding: 20px;
             margin: 0;
@@ -34,28 +33,287 @@
             align-items: center;
         }
 
-        .container {
+        .main-wrapper {
             width: 100%;
-            max-width: 900px;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            /* Mobile-first friendly width */
             margin-top: 20px;
         }
 
+        /* --- Header --- */
+        header {
+            margin-bottom: 30px;
+        }
+
         h1 {
-            font-weight: 600;
-            font-size: 1.8em;
-            margin-bottom: 5px;
+            font-weight: 800;
+            font-size: 1.5em;
+            margin: 0;
             letter-spacing: -0.5px;
         }
 
-        p.subtitle {
-            color: var(--text-secondary);
-            margin-top: 5px;
+        .subtitle {
+            color: var(--text-muted);
             font-size: 0.9em;
-            font-weight: 300;
+            margin-top: 5px;
+        }
+
+        /* --- Status Pill --- */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .status-pill.danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .status-pill.wait {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        /* --- Hero Flow Section (Input -> Output) --- */
+        .hero-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--card-surface);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .voltage-block {
+            text-align: center;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .voltage-label {
+            display: block;
+            font-size: 0.75em;
+            color: var(--text-muted);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .voltage-val {
+            display: block;
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1;
+        }
+
+        .voltage-unit {
+            font-size: 0.4em;
+            color: var(--text-muted);
+            font-weight: 400;
+            vertical-align: middle;
+        }
+
+        .hero-arrow {
+            color: var(--accent);
+            font-size: 1.5em;
+            opacity: 0.5;
+            animation: pulseArrow 2s infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-arrow span {
+            font-size: 0.6em;
+            margin-top: 5px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .voltage-val.output-hero {
+            font-size: 3.5em;
+            color: var(--accent);
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+        }
+
+        .voltage-val.danger {
+            color: var(--danger);
+            text-shadow: none;
+        }
+
+        @keyframes pulseArrow {
+            0% {
+                opacity: 0.3;
+                transform: translateX(-2px);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: translateX(2px);
+            }
+
+            100% {
+                opacity: 0.3;
+                transform: translateX(-2px);
+            }
+        }
+
+        /* --- Grid Metrics (2x2) --- */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .metric-card {
+            background: var(--card-surface);
+            padding: 20px;
+            border-radius: 18px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .metric-label {
+            font-size: 0.7em;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .metric-val {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .metric-val.load {
+            color: var(--warning);
+        }
+
+        /* --- Timer Bar (Dynamic) --- */
+        .timer-bar {
+            background: #2a1b1b;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 15px;
+            border-radius: 16px;
+            color: var(--danger);
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Controls Section --- */
+        .controls-wrapper {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        input[type=range] {
+            flex: 1;
+            margin: 0 15px;
+            height: 5px;
+            background: #333;
+            border-radius: 10px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* --- Relays (Minimal Dots) --- */
+        .relay-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .relay-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            transition: 0.3s;
+        }
+
+        .relay-dot.active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
         }
 
         /* --- Login Overlay --- */
@@ -65,28 +323,22 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 17, 21, 0.95);
+            background: rgba(15, 17, 21, 0.98);
             z-index: 9999;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(20px);
         }
 
         #loginBox {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 90%;
-            max-width: 380px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 300px;
         }
 
         #passInput {
-            padding: 16px;
+            padding: 15px;
             font-size: 1.1em;
             border-radius: 12px;
             border: 1px solid #333;
@@ -96,368 +348,139 @@
             margin: 20px 0;
             text-align: center;
             outline: none;
-            transition: 0.2s;
-            box-sizing: border-box;
-        }
-
-        #passInput:focus {
-            border-color: var(--accent);
         }
 
         #loginBtn {
-            padding: 16px 0;
+            padding: 15px;
             width: 100%;
             background: var(--accent);
             color: white;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
-            font-size: 1em;
             border-radius: 12px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        #loginBtn:hover {
-            background: #2563eb;
+        /* Schematic Toggle */
+        .tech-footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .schematic-box {
+            display: none;
+            margin-top: 20px;
+            background: #111;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #333;
         }
 
         .locked {
-            filter: blur(15px);
+            filter: blur(20px);
             pointer-events: none;
-            opacity: 0.5;
-        }
-
-        /* --- Dashboard Grid --- */
-        .machine-face {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .screen {
-            background: #14161c;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: left;
-            position: relative;
-            transition: transform 0.2s;
-        }
-
-        .screen:hover {
-            transform: translateY(-2px);
-        }
-
-        .screen-label {
-            font-size: 0.75em;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .screen-val {
-            font-size: 2.2em;
-            font-weight: 600;
-            color: var(--text-primary);
-            display: block;
-        }
-
-        .screen.main {
-            grid-column: span 3;
-            background: linear-gradient(135deg, #1c1e26 0%, #16181f 100%);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            padding: 40px;
-        }
-
-        .screen.main .screen-val {
-            font-size: 4.5em;
-            letter-spacing: -2px;
-        }
-
-        .screen.main .screen-label {
-            color: var(--accent);
-            margin-bottom: 0;
-        }
-
-        /* Status Colors */
-        .screen.red-text .screen-val {
-            color: var(--danger);
-        }
-
-        .screen.yellow-text .screen-val {
-            color: var(--warning);
-        }
-
-        /* Historically yellow, but here gold/warning */
-
-        /* Danger State */
-        .screen.main.danger-state .screen-val {
-            color: var(--danger);
-        }
-
-        .screen.main.danger-state {
-            border-color: rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.1);
-        }
-
-        /* --- Controls --- */
-        .controls-area {
-            display: flex;
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .control-panel {
-            flex: 1;
-            background: #14161c;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: left;
-        }
-
-        .control-panel h3 {
-            margin: 0 0 20px 0;
-            font-size: 0.9em;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        input[type=range] {
-            width: 100%;
-            cursor: pointer;
-            height: 6px;
-            background: #333;
-            border-radius: 10px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--text-primary);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            border: 2px solid var(--card-bg);
-            transition: transform 0.1s;
-        }
-
-        input[type=range]::-webkit-slider-thumb:active {
-            transform: scale(1.1);
-        }
-
-        /* --- Output Status --- */
-        .output-relay {
-            display: inline-block;
-            padding: 12px 30px;
-            border-radius: 50px;
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            font-weight: 600;
-            font-size: 0.9em;
-            letter-spacing: 0.5px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .output-relay.off {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
-        .output-relay.wait {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
-            border-color: rgba(245, 158, 11, 0.2);
-        }
-
-        /* --- Relays --- */
-        .relays {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .relay-box {
-            width: 60px;
-            height: 60px;
-            border-radius: 16px;
-            background: #14161c;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.7em;
-            color: #555;
-            transition: 0.3s;
-        }
-
-        .relay-box span {
-            font-size: 1.4em;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .relay-box.active {
-            background: var(--text-primary);
-            color: var(--bg);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        /* --- Schematic --- */
-        .schematic-box {
-            margin-top: 40px;
-            padding: 30px;
-            border-radius: 20px;
-            background: #14161c;
-            text-align: center;
-        }
-
-        .schematic-title {
-            font-size: 0.9em;
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        /* --- Mobile --- */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            .machine-face {
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-            }
-
-            .screen.main {
-                grid-column: span 2;
-                padding: 30px;
-            }
-
-            .screen[style*="grid-column: span 3;"] {
-                grid-column: span 2 !important;
-            }
-
-            .controls-area {
-                flex-direction: column;
-            }
-
-            .screen-val {
-                font-size: 1.8em;
-            }
-
-            .screen.main .screen-val {
-                font-size: 3.5em;
-            }
+            opacity: 0.3;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Login Overlay -->
+    <!-- Login -->
     <div id="loginOverlay">
         <div id="loginBox">
-            <h2 style="margin-top:0; color:#fff;">Welcome Back</h2>
-            <p style="color:#888; margin-bottom: 20px;">Please authenticate to access the system.</p>
-            <input type="password" id="passInput" placeholder="Password">
-            <button id="loginBtn" onclick="checkPass()">Unlock</button>
-            <p id="errorMsg" style="color:var(--danger); display:none; margin-top:15px; font-size:0.9em;">Incorrect
-                password</p>
+            <h2 style="color:#fff;">Gabby</h2>
+            <input type="password" id="passInput" placeholder="Enter Password">
+            <button id="loginBtn" onclick="checkPass()">Unlock System</button>
+            <p id="errorMsg" style="color:var(--danger); display:none; margin-top:15px; font-size:0.9em;">Access Denied
+            </p>
         </div>
     </div>
 
-    <div class="container locked" id="mainContainer">
+    <div class="main-wrapper locked" id="mainContainer">
+        <header>
+            <div id="statusPill" class="status-pill">
+                <div class="status-dot"></div> <span id="statusText">SYSTEM ACTIVE</span>
+            </div>
+            <h1>Gabby Regulator</h1>
+            <p class="subtitle">16-Stage Intelligent Stabilization</p>
+        </header>
 
-        <!-- Output Status Badge -->
-        <div id="outputRelayBox" class="output-relay">
-            SYSTEM NORMAL
+        <!-- Timer Alert Bar -->
+        <div id="alertTimer" class="timer-bar">
+            <span>⚠️ PROTECTION DELAY</span> <span id="dispTimer">5</span>s
         </div>
 
-        <h1>Gabby Regulator</h1>
-        <p class="subtitle">Intelligent 16-Stage Stabilization System</p>
-
-        <div class="machine-face">
-            <div class="screen main" id="screenMain">
-                <span class="screen-label">Output Voltage</span>
-                <span class="screen-val" id="dispOut">220</span>
+        <!-- Hero Flow: Input -> Output -->
+        <div class="hero-flow">
+            <div class="voltage-block">
+                <span class="voltage-label">Grid Input</span>
+                <span class="voltage-val" id="dispIn">160<span class="voltage-unit">V</span></span>
             </div>
 
-            <div class="screen">
-                <span class="screen-label">Input</span>
-                <span class="screen-val" id="dispIn">160</span>
+            <div class="hero-arrow">
+                ➜
+                <span id="regType">BOOST</span>
             </div>
 
-            <div class="screen red-text">
-                <span class="screen-label">Load (A)</span>
-                <span class="screen-val" id="dispAmps">12.5</span>
-            </div>
-
-            <div class="screen">
-                <span class="screen-label">Stage</span>
-                <span class="screen-val" id="dispStep">11</span>
-            </div>
-
-            <div class="screen" style="grid-column: span 3;">
-                <span class="screen-label">Safety Timer</span>
-                <span class="screen-val" id="dispTimer">0</span>
+            <div class="voltage-block">
+                <span class="voltage-label">Target Output</span>
+                <span class="voltage-val output-hero" id="dispOut">220<span class="voltage-unit">V</span></span>
             </div>
         </div>
 
-        <div class="controls-area">
-            <div class="control-panel">
-                <h3>Grid Input Voltage</h3>
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">CURRENT LOAD</span>
+                <span class="metric-val load" id="dispAmps">12.5A</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">ACTIVE STAGE</span>
+                <span class="metric-val" id="dispStep">11</span>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-wrapper">
+            <div class="control-row">
+                <span class="control-label">GRID</span>
                 <input type="range" id="voltageSlider" min="130" max="320" value="160">
-                <div style="display:flex; justify-content:space-between; margin-top:10px; color:#555; font-size:0.8em;">
-                    <span>130V</span><span>320V</span>
-                </div>
+                <span class="control-label" style="min-width:40px; text-align:right;" id="inValPreview">160V</span>
             </div>
-            <div class="control-panel">
-                <h3>Power Load</h3>
+            <div class="control-row">
+                <span class="control-label">LOAD</span>
                 <input type="range" id="loadSlider" min="0" max="5000" value="2000" step="100">
-                <div id="loadText"
-                    style="margin-top:10px; color:var(--text-primary); font-weight:600; font-size:1.2em;">2000W</div>
+                <span class="control-label" style="min-width:40px; text-align:right;" id="loadText">2000W</span>
+            </div>
+
+            <div class="relay-dots">
+                <div class="relay-dot" id="r4"></div>
+                <div class="relay-dot" id="r3"></div>
+                <div class="relay-dot" id="r2"></div>
+                <div class="relay-dot" id="r1"></div>
             </div>
         </div>
 
-        <div class="relays">
-            <div class="relay-box" id="r4"><span>4</span>80V</div>
-            <div class="relay-box" id="r3"><span>3</span>40V</div>
-            <div class="relay-box" id="r2"><span>2</span>20V</div>
-            <div class="relay-box" id="r1"><span>1</span>10V</div>
+        <div class="tech-footer" onclick="toggleSchematic()">
+            Show Technical Schematic ▾
         </div>
 
-        <div class="schematic-box">
-            <div class="schematic-title">ANALOG FRONT END</div>
-            <svg class="diagram-svg" viewBox="0 0 500 250"
-                style="width:100%; max-width:500px; margin:0 auto; display:block;">
-                <circle cx="50" cy="120" r="25" class="component" style="stroke:#3b82f6; stroke-width:3; fill:none;" />
-                <text x="38" y="125" class="component-text" style="fill:#3b82f6; font-size:10px;">CT</text>
-                <rect x="75" y="100" width="10" height="40" class="component" style="fill:#333; stroke:#555;" />
-                <path d="M 200 80 L 200 160 L 280 120 Z" class="opamp"
-                    style="stroke:#fff; stroke-width:2; fill:#222;" />
-                <text x="220" y="125" class="component-text" style="fill:#fff; font-weight:bold;">LM358</text>
-                <rect x="380" y="80" width="80" height="80" class="component" style="fill:#1a1a1a; stroke:#555;" />
-                <text x="395" y="125" class="component-text" style="fill:#888;">MCU</text>
-                <!-- Wires -->
-                <path d="M 85 120 L 140 120 L 140 140 L 200 140" class="wire"
-                    style="stroke:#444; fill:none; stroke-width:2" />
-                <path d="M 320 120 L 380 120" class="wire" style="stroke:#444; fill:none; stroke-width:2" />
-                <path d="M 50 145 L 50 180 L 380 180" class="wire" style="stroke:#333; fill:none; stroke-width:2" />
+        <div class="schematic-box" id="techSchematic">
+            <svg viewBox="0 0 500 200" style="width:100%;">
+                <circle cx="50" cy="100" r="20" style="stroke:#3b82f6; fill:none; stroke-width:2" />
+                <text x="40" y="105" fill="#3b82f6" font-size="10">CT</text>
+                <path d="M 180 60 L 180 140 L 260 100 Z" style="stroke:#fff; fill:none; stroke-width:2" />
+                <text x="200" y="105" fill="#fff" font-size="12">LM358</text>
+                <rect x="350" y="60" width="60" height="80" style="stroke:#555; fill:#222;" />
+                <text x="365" y="100" fill="#fff" font-size="10">MCU</text>
+                <line x1="70" y1="100" x2="180" y2="100" style="stroke:#555; stroke-width:2" />
+                <line x1="260" y1="100" x2="350" y2="100" style="stroke:#555; stroke-width:2" />
             </svg>
         </div>
+
     </div>
 
     <script>
@@ -465,30 +488,31 @@
         const OFFSET = -80;
         const CUTOFF_LIMIT = 250;
 
-        // Elements
         const elIn = document.getElementById('dispIn');
         const elOut = document.getElementById('dispOut');
         const elAmps = document.getElementById('dispAmps');
         const elStep = document.getElementById('dispStep');
         const elTimer = document.getElementById('dispTimer');
         const elLoadText = document.getElementById('loadText');
-        const elRelayBox = document.getElementById('outputRelayBox');
-        const elScreenMain = document.getElementById('screenMain');
+        const elPill = document.getElementById('statusPill');
+        const elPillText = document.getElementById('statusText');
+        const elAlertTimer = document.getElementById('alertTimer');
+        const elRegType = document.getElementById('regType');
+        const elInPreview = document.getElementById('inValPreview');
 
         const sliderV = document.getElementById('voltageSlider');
         const sliderL = document.getElementById('loadSlider');
 
-        // System State
-        let timerVal = 5.0; // Seconds
+        let timerVal = 5.0;
         let isTimerActive = true;
-        let systemLoop = null;
 
         function runSystem() {
             let vin = parseInt(sliderV.value);
             let loadWatts = parseInt(sliderL.value);
             elLoadText.innerText = loadWatts + "W";
+            elInPreview.innerText = vin + "V";
 
-            // 1. Calculate Est Vout
+            // Calc Best Stage
             let bestStage = 0;
             let minErr = 9999;
             let bestVout = vin;
@@ -507,16 +531,17 @@
                 }
             }
 
-            // 2. Logic Machine
+            // Logic State
             if (bestVout > CUTOFF_LIMIT) {
                 isTimerActive = true;
                 timerVal = 5.0;
 
-                elOut.innerText = "HI";
-                elScreenMain.className = "screen main danger-state";
-                elRelayBox.className = "output-relay off";
-                elRelayBox.innerText = "DANGER: CUTOFF";
-                elAmps.innerText = "0.0";
+                // Danger UI
+                elOut.innerHTML = "CUT";
+                elOut.className = "voltage-val output-hero danger";
+                elAlertTimer.style.display = "flex";
+                elPill.className = "status-pill danger";
+                elPillText.innerText = "DANGER: HIGH VOLTAGE";
 
             } else if (isTimerActive) {
                 timerVal -= 0.1;
@@ -525,45 +550,51 @@
                     timerVal = 0;
                 }
 
-                elOut.innerText = "---";
-                elScreenMain.className = "screen main";
-                elRelayBox.className = "output-relay wait";
-                elRelayBox.innerText = "PROTECTING...";
-                elAmps.innerText = "0.0";
+                // Wait UI
+                elOut.innerHTML = "---";
+                elOut.className = "voltage-val output-hero";
+                elAlertTimer.style.display = "flex";
+                elPill.className = "status-pill wait";
+                elPillText.innerText = "PROTECTION DELAY...";
 
             } else {
-                elOut.innerText = bestVout;
-                elScreenMain.className = "screen main";
-                elRelayBox.className = "output-relay";
-                elRelayBox.innerText = "SYSTEM ACTIVE";
-
-                let amps = (bestVout > 50) ? (loadWatts / bestVout).toFixed(1) : "0.0";
-                elAmps.innerText = amps;
+                // Active UI
+                elOut.innerHTML = bestVout + '<span class="voltage-unit">V</span>';
+                elOut.className = "voltage-val output-hero";
+                elAlertTimer.style.display = "none";
+                elPill.className = "status-pill";
+                elPillText.innerText = "SYSTEM NORMAL";
             }
 
-            elIn.innerText = vin;
+            // Update Metrics
+            elIn.innerHTML = vin + '<span class="voltage-unit">V</span>';
+            let amps = (bestVout > 50 && !isTimerActive && bestVout <= CUTOFF_LIMIT) ? (loadWatts / bestVout).toFixed(1) + "A" : "0.0A";
+            elAmps.innerText = amps;
 
-            // Show Minus for Reduction Stages (0-7)
+            // Step Display
             if (bestStage < 8) {
                 elStep.innerText = "- " + bestStage;
-                elStep.style.color = "var(--accent)";
+                elStep.style.color = "#3b82f6";
+                elRegType.innerText = "BUCK";
+                elRegType.style.color = "#3b82f6";
             } else {
                 elStep.innerText = bestStage;
-                elStep.style.color = "var(--text-primary)";
+                elStep.style.color = "#fff";
+                elRegType.innerText = "BOOST";
+                elRegType.style.color = "#10b981";
             }
 
             elTimer.innerText = Math.ceil(timerVal);
 
-            document.getElementById('r1').className = 'relay-box ' + ((bestStage & 1) ? 'active' : '');
-            document.getElementById('r2').className = 'relay-box ' + ((bestStage & 2) ? 'active' : '');
-            document.getElementById('r3').className = 'relay-box ' + ((bestStage & 4) ? 'active' : '');
-            document.getElementById('r4').className = 'relay-box ' + ((bestStage & 8) ? 'active' : '');
+            // Update Relays
+            document.getElementById('r1').className = 'relay-dot ' + ((bestStage & 1) ? 'active' : '');
+            document.getElementById('r2').className = 'relay-dot ' + ((bestStage & 2) ? 'active' : '');
+            document.getElementById('r3').className = 'relay-dot ' + ((bestStage & 4) ? 'active' : '');
+            document.getElementById('r4').className = 'relay-dot ' + ((bestStage & 8) ? 'active' : '');
         }
 
-        // Login Function
         function checkPass() {
-            const pass = document.getElementById('passInput').value;
-            if (pass === "Gabby2026") {
+            if (document.getElementById('passInput').value === "Gabby2026") {
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('mainContainer').classList.remove('locked');
             } else {
@@ -571,9 +602,12 @@
             }
         }
 
-        // Run Logic every 100ms
-        setInterval(runSystem, 100);
+        function toggleSchematic() {
+            const el = document.getElementById('techSchematic');
+            el.style.display = el.style.display === "block" ? "none" : "block";
+        }
 
+        setInterval(runSystem, 100);
     </script>
 </body>
 
