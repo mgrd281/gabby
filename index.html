@@ -4,22 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاكاة منظم الجهد 16 مرحلة (Timer Reset Logic)</title>
-    <!-- Same CSS as before -->
+    <title>محاكاة منظم الجهد 16 مرحلة (Responsive)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #222;
             color: #fff;
             text-align: center;
-            padding: 20px;
+            padding: 10px;
+            margin: 0;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
             background: #333;
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
@@ -27,23 +27,64 @@
         h1 {
             color: #f1c40f;
             margin-bottom: 5px;
+            font-size: 1.5em;
         }
 
         p.subtitle {
             color: #aaa;
             margin-top: 0;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
 
         .machine-face {
             background: #111;
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border: 2px solid #555;
             margin: 20px 0;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 10px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .machine-face {
+                grid-template-columns: 1fr 1fr;
+                /* 2 cols */
+            }
+
+            .screen.main {
+                grid-column: span 2;
+                /* Full width */
+            }
+
+            .screen[style*="grid-column: span 3;"] {
+                grid-column: span 2 !important;
+            }
+
+            .controls-area {
+                flex-direction: column;
+                /* Stack controls vertical */
+                gap: 10px;
+            }
+
+            .screen-val {
+                font-size: 1.5em;
+            }
+
+            .screen.main .screen-val {
+                font-size: 2.2em;
+            }
+
+            h1 {
+                font-size: 1.2em;
+            }
+
+            .relay-box {
+                width: 50px;
+                font-size: 0.6em;
+            }
         }
 
         .screen {
@@ -111,6 +152,14 @@
             text-align: right;
         }
 
+        .control-panel h3 {
+            margin-top: 0;
+            color: #3498db;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+            font-size: 1em;
+        }
+
         input[type=range] {
             width: 100%;
             cursor: pointer;
@@ -119,7 +168,8 @@
 
         .output-relay {
             background: #27ae60;
-            width: 100px;
+            width: 100%;
+            max-width: 200px;
             padding: 10px;
             border-radius: 5px;
             margin: 20px auto;
@@ -141,16 +191,16 @@
         .relays {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 5px;
             margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .relay-box {
-            padding: 10px;
+            padding: 8px;
             background: #2c3e50;
             border-radius: 5px;
-            width: 70px;
+            width: 60px;
             font-size: 0.7em;
             transition: all 0.2s;
             border: 1px solid #555;
@@ -162,6 +212,56 @@
             border-color: #f39c12;
             transform: scale(1.1);
         }
+
+        /* Schematic Area */
+        .schematic-box {
+            background: #222;
+            border: 1px dashed #777;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: left;
+            position: relative;
+        }
+
+        .schematic-title {
+            font-weight: bold;
+            color: #bbb;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            height: auto;
+            max-width: 600px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .wire {
+            stroke: #3498db;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .component {
+            fill: #444;
+            stroke: #fff;
+            stroke-width: 1;
+        }
+
+        .component-text {
+            fill: #fff;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .opamp {
+            fill: #2c3e50;
+            stroke: #f1c40f;
+            stroke-width: 2;
+        }
     </style>
 </head>
 
@@ -169,7 +269,7 @@
 
     <div class="container">
         <h1>نظام تنظيم ذكي - 16 مرحلة</h1>
-        <p class="subtitle">إعادة ضبط المؤقت عند الخطأ</p>
+        <p class="subtitle">تصميم متجاوب + حماية ذكية</p>
 
         <div class="machine-face">
             <div class="screen main yellow-text" id="screenMain">
@@ -218,6 +318,29 @@
             <div class="relay-box" id="r3">R3 40V</div>
             <div class="relay-box" id="r2">R2 20V</div>
             <div class="relay-box" id="r1">R1 10V</div>
+        </div>
+
+        <div class="schematic-box">
+            <div class="schematic-title">Advanced Protection Circuit</div>
+            <svg class="diagram-svg" viewBox="0 0 500 250">
+                <circle cx="50" cy="120" r="25" class="component" style="stroke:#e74c3c; stroke-width:3; fill:none;" />
+                <text x="35" y="125" class="component-text" style="fill:#e74c3c">CT</text>
+                <rect x="75" y="100" width="10" height="40" class="component" />
+                <text x="70" y="90" class="component-text">Burden</text>
+                <path d="M 200 80 L 200 160 L 280 120 Z" class="opamp" />
+                <text x="210" y="105" class="component-text" style="font-size:16px;">-</text>
+                <text x="210" y="145" class="component-text" style="font-size:16px;">+</text>
+                <text x="220" y="125" class="component-text" style="fill:#fff; font-weight:bold;">LM358</text>
+                <rect x="380" y="80" width="80" height="80" class="component" style="fill:#2980b9" />
+                <text x="390" y="100" class="component-text" style="font-weight:bold">ARDUINO</text>
+                <text x="400" y="130" class="component-text">A1 Pin</text>
+                <path d="M 85 120 L 140 120 L 140 140 L 200 140" class="wire" />
+                <path d="M 280 120 L 320 120 L 320 60 L 160 60 L 160 100 L 200 100" class="wire"
+                    style="stroke-dasharray: 4;" />
+                <path d="M 320 120 L 380 120" class="wire" />
+                <path d="M 50 145 L 50 180 L 380 180" class="wire" style="stroke:#7f8c8d" />
+                <text x="200" y="195" class="component-text">GND Common</text>
+            </svg>
         </div>
     </div>
 
