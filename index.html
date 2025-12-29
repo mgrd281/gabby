@@ -607,6 +607,7 @@
 
         let timerVal = 5.0;
         let isTimerActive = true;
+        window.lastStage = 0;
 
         function runSystem() {
             let vin = parseInt(sliderV.value);
@@ -616,22 +617,40 @@
 
             // Calc Best Stage
             let bestStage = 0;
-            let minErr = 9999;
             let bestVout = vin;
 
-            for (let i = 0; i < 16; i++) {
-                let corr = 0;
-                if (i & 1) corr += 10;
-                if (i & 2) corr += 20;
-                if (i & 4) corr += 40;
-                if (i & 8) corr += 80;
-                let est = vin + corr + OFFSET;
-                if (Math.abs(TARGET - est) < minErr) {
-                    minErr = Math.abs(TARGET - est);
-                    bestStage = i;
-                    bestVout = est;
+            // 0. Hysteresis Check
+            let currentCorrection = 0;
+            if (window.lastStage & 1) currentCorrection += 10;
+            if (window.lastStage & 2) currentCorrection += 20;
+            if (window.lastStage & 4) currentCorrection += 40;
+            if (window.lastStage & 8) currentCorrection += 80;
+
+            let currentVoutEst = vin + currentCorrection + OFFSET;
+
+            // Window: 205 - 235
+            if (window.lastStage !== undefined && currentVoutEst >= 205 && currentVoutEst <= 235) {
+                bestStage = window.lastStage;
+                bestVout = currentVoutEst;
+            } else {
+                // Search for best
+                let minErr = 9999;
+                for (let i = 0; i < 16; i++) {
+                    let corr = 0;
+                    if (i & 1) corr += 10;
+                    if (i & 2) corr += 20;
+                    if (i & 4) corr += 40;
+                    if (i & 8) corr += 80;
+                    let est = vin + corr + OFFSET;
+                    if (Math.abs(TARGET - est) < minErr) {
+                        minErr = Math.abs(TARGET - est);
+                        bestStage = i;
+                        bestVout = est;
+                    }
                 }
             }
+
+            window.lastStage = bestStage;
 
             // Logic State
             if (bestVout > CUTOFF_LIMIT) {

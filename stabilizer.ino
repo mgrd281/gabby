@@ -92,6 +92,7 @@ float CURRENT_CALIBRATION = 0.15;
 const int TARGET_VOLTAGE = 220;
 const int BASE_OFFSET = -80; // Changed to -80V (More Reduction Steps)
 const int STARTUP_DELAY_SEC = 5;
+int lastStage = 0; // Tracks previous state for hysteresis
 
 // TM1680 Config
 #define TM1680_SYSON 0x81
@@ -146,26 +147,50 @@ void loop() {
   float minError = 1000;
   float bestVout = vin;
 
-  for (int i = 0; i < 16; i++) {
-    float correction = 0;
-    if (i & 1)
-      correction += 10;
-    if (i & 2)
-      correction += 20;
-    if (i & 4)
-      correction += 40;
-    if (i & 8)
-      correction += 80;
+  // 0. Hysteresis Check
+  // Calculate what the output WOULD be if we keep the last stage
+  float currentCorrection = 0;
+  if (lastStage & 1)
+    currentCorrection += 10;
+  if (lastStage & 2)
+    currentCorrection += 20;
+  if (lastStage & 4)
+    currentCorrection += 40;
+  if (lastStage & 8)
+    currentCorrection += 80;
 
-    float estV = vin + correction + BASE_OFFSET;
-    float err = abs(TARGET_VOLTAGE - estV);
+  float currentVoutWithOffset = vin + currentCorrection + BASE_OFFSET;
 
-    if (err < minError) {
-      minError = err;
-      bestStage = i;
-      bestVout = estV;
+  // Hysteresis Window: 205V to 235V
+  if (currentVoutWithOffset >= 205 && currentVoutWithOffset <= 235) {
+    // Keep current stage (Prevent hunting)
+    bestStage = lastStage;
+    bestVout = currentVoutWithOffset;
+  } else {
+    // Search for new best stage
+    for (int i = 0; i < 16; i++) {
+      float correction = 0;
+      if (i & 1)
+        correction += 10;
+      if (i & 2)
+        correction += 20;
+      if (i & 4)
+        correction += 40;
+      if (i & 8)
+        correction += 80;
+
+      float estV = vin + correction + BASE_OFFSET;
+      float err = abs(TARGET_VOLTAGE - estV);
+
+      if (err < minError) {
+        minError = err;
+        bestStage = i;
+        bestVout = estV;
+      }
     }
   }
+
+  lastStage = bestStage; // Update global state
 
   setRelays(bestStage);
 
