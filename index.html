@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاكاة منظم الجهد 16 مرحلة (Responsive)</title>
+    <title>محاكاة منظم الجهد 16 مرحلة (Secured)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -34,6 +34,58 @@
             color: #aaa;
             margin-top: 0;
             font-size: 0.8em;
+        }
+
+        /* Login Overlay */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loginBox {
+            background: #333;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #f1c40f;
+            text-align: center;
+            width: 90%;
+            max-width: 300px;
+        }
+
+        #passInput {
+            padding: 10px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            border: none;
+            width: 80%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #loginBtn {
+            padding: 10px 30px;
+            background: #f1c40f;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        /* Blur Content when locked */
+        .locked {
+            filter: blur(5px);
+            pointer-events: none;
         }
 
         .machine-face {
@@ -267,7 +319,19 @@
 
 <body>
 
-    <div class="container">
+    <!-- Login Overlay -->
+    <div id="loginOverlay">
+        <div id="loginBox">
+            <h2 style="color:#f1c40f; margin-top:0;">Gabby System</h2>
+            <p>الرجاء أدخال كلمة المرور</p>
+            <input type="password" id="passInput" placeholder="Password">
+            <br>
+            <button id="loginBtn" onclick="checkPass()">ENTER</button>
+            <p id="errorMsg" style="color:red; display:none; margin-top:10px;">خطأ في كلمة المرور</p>
+        </div>
+    </div>
+
+    <div class="container locked" id="mainContainer">
         <h1>نظام تنظيم ذكي - 16 مرحلة</h1>
         <p class="subtitle">تصميم متجاوب + حماية ذكية</p>
 
@@ -438,6 +502,17 @@
             document.getElementById('r2').className = 'relay-box ' + ((bestStage & 2) ? 'active' : '');
             document.getElementById('r3').className = 'relay-box ' + ((bestStage & 4) ? 'active' : '');
             document.getElementById('r4').className = 'relay-box ' + ((bestStage & 8) ? 'active' : '');
+        }
+
+        // Login Function
+        function checkPass() {
+            const pass = document.getElementById('passInput').value;
+            if (pass === "Gabby2026") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainContainer').classList.remove('locked');
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
         }
 
         // Run Logic every 100ms
