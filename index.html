@@ -368,7 +368,8 @@
                 <h3>Input Voltage</h3>
                 <input type="range" id="voltageSlider" min="130" max="320" value="160">
                 <div style="display:flex; justify-content:space-between; margin-top:5px;">
-                    <span>130V</span><span>320V</span></div>
+                    <span>130V</span><span>320V</span>
+                </div>
             </div>
             <div class="control-panel">
                 <h3>Load (Watts)</h3>
@@ -410,7 +411,7 @@
 
     <script>
         const TARGET = 220;
-        const OFFSET = -50;
+        const OFFSET = -80; // More Reduction
         const CUTOFF_LIMIT = 250;
 
         // Elements
@@ -495,7 +496,16 @@
             }
 
             elIn.innerText = vin;
-            elStep.innerText = bestStage;
+
+            // Show Minus for Reduction Stages (0-7)
+            if (bestStage < 8) {
+                elStep.innerText = "- " + bestStage;
+                elStep.style.color = "#3498db"; // Optional: Make it blue for 'Cold/Down'
+            } else {
+                elStep.innerText = bestStage;
+                elStep.style.color = "#0f0";
+            }
+
             elTimer.innerText = Math.ceil(timerVal);
 
             document.getElementById('r1').className = 'relay-box ' + ((bestStage & 1) ? 'active' : '');

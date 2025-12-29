@@ -90,7 +90,7 @@ const byte ADDR_TIMER = 22;
 float VOLTAGE_CALIBRATION = 0.50;
 float CURRENT_CALIBRATION = 0.15;
 const int TARGET_VOLTAGE = 220;
-const int BASE_OFFSET = -50;
+const int BASE_OFFSET = -80; // Changed to -80V (More Reduction Steps)
 const int STARTUP_DELAY_SEC = 5;
 
 // TM1680 Config
