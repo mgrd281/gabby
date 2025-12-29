@@ -488,32 +488,35 @@
     <!-- Login -->
     <div id="loginOverlay">
         <div id="loginBox">
-            <h2 style="color:#fff;">Gabby</h2>
-            <input type="password" id="passInput" placeholder="Enter Password">
-            <button id="loginBtn" onclick="checkPass()">Unlock System</button>
-            <p id="errorMsg" style="color:var(--danger); display:none; margin-top:15px; font-size:0.9em;">Access Denied
-            </p>
+            <h2 style="margin-top:0; color:#fff;">مرحباً بك / Welcome</h2>
+            <p style="color:#888; margin-bottom: 20px;">الرجاء إدخال كلمة المرور<br><span style="font-size:0.8em">Please
+                    authenticate to access</span></p>
+            <input type="password" id="passInput" placeholder="كلمة المرور / Password">
+            <button id="loginBtn" onclick="checkPass()">دخول / Unlock</button>
+            <p id="errorMsg" style="color:var(--danger); display:none; margin-top:15px; font-size:0.9em;">كلمة المرور
+                خطأ / Incorrect Password</p>
         </div>
     </div>
 
     <div class="main-wrapper locked" id="mainContainer">
         <header>
             <div id="statusPill" class="status-pill">
-                <div class="status-dot"></div> <span id="statusText">SYSTEM ACTIVE</span>
+                <div class="status-dot"></div> <span id="statusText">النظام يعمل / SYSTEM ACTIVE</span>
             </div>
             <h1>Gabby Regulator</h1>
-            <p class="subtitle">16-Stage Intelligent Stabilization</p>
+            <p class="subtitle">نظام تثبيت ذكي 16 مرحلة<br><span style="font-size:0.8em; opacity:0.7;">Intelligent
+                    16-Stage Stabilization</span></p>
         </header>
 
         <!-- Timer Alert Bar -->
         <div id="alertTimer" class="timer-bar">
-            <span>⚠️ PROTECTION DELAY</span> <span id="dispTimer">5</span>s
+            <span>⚠️ تأخير حماية / DELAY</span> <span id="dispTimer">5</span>s
         </div>
 
         <!-- Hero Flow: Input -> Output -->
         <div class="hero-flow">
             <div class="voltage-block">
-                <span class="voltage-label">Grid Input</span>
+                <span class="voltage-label">دخول الشبكة<br>GRID INPUT</span>
                 <span class="voltage-val" id="dispIn">160<span class="voltage-unit">V</span></span>
             </div>
 
@@ -523,7 +526,7 @@
             </div>
 
             <div class="voltage-block">
-                <span class="voltage-label">Target Output</span>
+                <span class="voltage-label">الخرج المستهدف<br>TARGET OUTPUT</span>
                 <span class="voltage-val output-hero" id="dispOut">220<span class="voltage-unit">V</span></span>
             </div>
         </div>
@@ -531,11 +534,11 @@
         <!-- Metrics Grid -->
         <div class="metrics-grid">
             <div class="metric-card">
-                <span class="metric-label">CURRENT LOAD</span>
+                <span class="metric-label">الحمل (أمبير)<br>CURRENT LOAD</span>
                 <span class="metric-val load" id="dispAmps">12.5A</span>
             </div>
             <div class="metric-card">
-                <span class="metric-label">ACTIVE STAGE</span>
+                <span class="metric-label">المرحلة الحالية<br>ACTIVE STAGE</span>
                 <span class="metric-val" id="dispStep">11</span>
             </div>
         </div>
@@ -543,14 +546,16 @@
         <!-- Controls -->
         <div class="controls-wrapper">
             <div class="control-row">
-                <span class="control-label">GRID</span>
+                <span class="control-label">الجهد<br><span style="font-size:0.7em">VOLT</span></span>
                 <input type="range" id="voltageSlider" min="130" max="320" value="160">
-                <span class="control-label" style="min-width:40px; text-align:right;" id="inValPreview">160V</span>
+                <span class="control-label" style="min-width:40px; text-align:left; direction:ltr;"
+                    id="inValPreview">160V</span>
             </div>
             <div class="control-row">
-                <span class="control-label">LOAD</span>
+                <span class="control-label">الحمل<br><span style="font-size:0.7em">LOAD</span></span>
                 <input type="range" id="loadSlider" min="0" max="5000" value="2000" step="100">
-                <span class="control-label" style="min-width:40px; text-align:right;" id="loadText">2000W</span>
+                <span class="control-label" style="min-width:40px; text-align:left; direction:ltr;"
+                    id="loadText">2000W</span>
             </div>
 
             <div class="relay-dots">
@@ -638,7 +643,7 @@
                 elOut.className = "voltage-val output-hero danger";
                 elAlertTimer.style.display = "flex";
                 elPill.className = "status-pill danger";
-                elPillText.innerText = "DANGER: HIGH VOLTAGE";
+                elPillText.innerText = "خطر: جهد عالي / DANGER";
 
             } else if (isTimerActive) {
                 timerVal -= 0.1;
@@ -652,7 +657,7 @@
                 elOut.className = "voltage-val output-hero";
                 elAlertTimer.style.display = "flex";
                 elPill.className = "status-pill wait";
-                elPillText.innerText = "PROTECTION DELAY...";
+                elPillText.innerText = "انتظار (حماية) / PROTECT";
 
             } else {
                 // Active UI
@@ -660,7 +665,7 @@
                 elOut.className = "voltage-val output-hero";
                 elAlertTimer.style.display = "none";
                 elPill.className = "status-pill";
-                elPillText.innerText = "SYSTEM NORMAL";
+                elPillText.innerText = "النظام يعمل / SYSTEM ACTIVE";
             }
 
             // Update Metrics
@@ -672,12 +677,12 @@
             if (bestStage < 8) {
                 elStep.innerText = "- " + bestStage;
                 elStep.style.color = "#3b82f6";
-                elRegType.innerText = "BUCK";
+                elRegType.innerText = "تخفيض/BUCK";
                 elRegType.style.color = "#3b82f6";
             } else {
                 elStep.innerText = bestStage;
                 elStep.style.color = "#fff";
-                elRegType.innerText = "BOOST";
+                elRegType.innerText = "رفع/BOOST";
                 elRegType.style.color = "#10b981";
             }
 
